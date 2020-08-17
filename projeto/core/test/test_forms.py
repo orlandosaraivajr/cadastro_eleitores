@@ -1,5 +1,5 @@
 from django.test import TestCase
-from core.forms import EleitorForm
+from core.forms import EleitorForm, EleitorRedeSocialForm
 
 
 class EleitorFormTest(TestCase):
@@ -44,5 +44,42 @@ class EleitorFormTest(TestCase):
         )
         data = dict(valid, **kwargs)
         form = EleitorForm(data)
+        form.is_valid()
+        return form
+
+
+class EleitorRedeSocialFormTest(TestCase):
+    def test_form_has_fields(self):
+        form = EleitorRedeSocialForm()
+        expected = ['facebook_id', 'twitter_id', 'foursquare_id']
+        self.assertSequenceEqual(expected, list(form.fields))
+
+    def test_ao_menos_uma_rede_social(self):
+        form = self.make_validated_form(facebook_id='',twitter_id='', foursquare_id='')
+        errors = form.errors
+        errors_list = errors['__all__']
+        msg = 'Informe ao menos uma rede social'
+        self.assertEqual([msg], errors_list)
+
+    def test_sem_facebook(self):
+        '''Permitido não ter facebook, mas ao menos uma rede social '''
+        form = self.make_validated_form(facebook_id='')
+        self.assertEqual(None, form.cleaned_data['facebook_id'])
+        self.assertEqual('orlandosaraivaj', form.cleaned_data['twitter_id'])
+
+    def test_sem_twitter(self):
+        '''Permitido não ter twitter, mas ao menos uma rede social '''
+        form = self.make_validated_form(twitter_id='')
+        self.assertEqual('orlandosaraivajr', form.cleaned_data['facebook_id'])
+        self.assertEqual(None, form.cleaned_data['twitter_id'])
+
+    def make_validated_form(self, **kwargs):
+        valid = dict(
+            facebook_id='orlandosaraivajr',
+            twitter_id='orlandosaraivaj',
+            foursquare_id='orlandosaraiva'
+        )
+        data = dict(valid, **kwargs)
+        form = EleitorRedeSocialForm(data)
         form.is_valid()
         return form

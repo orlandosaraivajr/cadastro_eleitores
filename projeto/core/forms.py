@@ -1,7 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-
-from core.models import EleitorModel
+from core.models import EleitorModel, EleitorRedeSocialModel
 
 
 def validate_cpf(value):
@@ -31,4 +30,20 @@ class EleitorForm(forms.ModelForm):
         self.cleaned_data = super().clean()
         if not self.cleaned_data.get('nome_completo') and not self.cleaned_data.get('phcpfone'):
             raise ValidationError('Informe seu nome ou cpf')
+        return self.cleaned_data
+
+
+class EleitorRedeSocialForm(forms.ModelForm):
+
+    class Meta:
+        model = EleitorRedeSocialModel
+        fields = ['facebook_id', 'twitter_id', 'foursquare_id']
+
+    def clean(self):
+        self.cleaned_data = super().clean()
+        sem_face = not self.cleaned_data.get('facebook_id')
+        sem_twitter = not self.cleaned_data.get('twitter_id')
+        sem_foursquare = not self.cleaned_data.get('foursquare_id')
+        if sem_face and sem_twitter and sem_foursquare:
+            raise ValidationError('Informe ao menos uma rede social')
         return self.cleaned_data
