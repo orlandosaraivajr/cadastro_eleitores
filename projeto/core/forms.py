@@ -15,6 +15,20 @@ class EleitorForm(forms.ModelForm):
     class Meta:
         model = EleitorModel
         fields = ['nome_completo', 'cpf', 'idade', 'naturalidade']
+        error_messages = {
+            'nome_completo': {
+                'required': ("Informe o nome completo."),
+            },
+            'cpf': {
+                'required': ("Informe um CPF válido."),
+            },
+            'idade': {
+                'required': ("Informe uma idade válida."),
+            },
+            'naturalidade': {
+                'required': ("Informe a naturalidade."),
+            }
+        }
 
     def clean_nome_completo(self):
         nome = self.cleaned_data['nome_completo']
@@ -26,10 +40,13 @@ class EleitorForm(forms.ModelForm):
         validate_cpf(cpf)
         return cpf
 
+    def clean_naturalidade(self):
+        naturalidade = self.cleaned_data['naturalidade']
+        palavras = [w.capitalize() for w in naturalidade.split()]
+        return ' '.join(palavras)
+
     def clean(self):
         self.cleaned_data = super().clean()
-        if not self.cleaned_data.get('nome_completo') and not self.cleaned_data.get('phcpfone'):
-            raise ValidationError('Informe seu nome ou cpf')
         return self.cleaned_data
 
 

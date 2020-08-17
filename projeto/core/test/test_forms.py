@@ -31,9 +31,13 @@ class EleitorFormTest(TestCase):
         form = self.make_validated_form(idade=-1)
         self.assertListEqual(['idade'], list(form.errors))
 
-    def test_must_be_capitalized(self):
+    def test_nome_completo_capitalized(self):
         form = self.make_validated_form(nome_completo='ORLANDO Saraiva')
         self.assertEqual('Orlando Saraiva', form.cleaned_data['nome_completo'])
+
+    def test_naturalidade_capitalized(self):
+        form = self.make_validated_form(naturalidade='mogi mirim')
+        self.assertEqual('Mogi Mirim', form.cleaned_data['naturalidade'])
 
     def make_validated_form(self, **kwargs):
         valid = dict(
@@ -55,7 +59,8 @@ class EleitorRedeSocialFormTest(TestCase):
         self.assertSequenceEqual(expected, list(form.fields))
 
     def test_ao_menos_uma_rede_social(self):
-        form = self.make_validated_form(facebook_id='',twitter_id='', foursquare_id='')
+        form = self.make_validated_form(
+            facebook_id='', twitter_id='', foursquare_id='')
         errors = form.errors
         errors_list = errors['__all__']
         msg = 'Informe ao menos uma rede social'

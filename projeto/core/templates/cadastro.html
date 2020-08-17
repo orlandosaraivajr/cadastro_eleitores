@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Orlando Saraiva do Nascimento Júnior">
+  
+  <title>Cadastro Eleitores - Projeto Exemplo</title>
+</head>
+<body>
+
+<br><br>
+    <form action={% url 'core:cadastro' %} novalidate method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h3>Dados Eleitor</h3>
+        Nome Completo: {{ form_eleitor.nome_completo }}
+        <br>
+        CPF: {{ form_eleitor.cpf }}
+        <br>
+        Idade: {{ form_eleitor.idade }}
+        <br>
+        Naturalidade: {{ form_eleitor.naturalidade }}
+        <br><br>
+        <h3>Rede Social</h3>
+        <br>
+        <br>
+        Facebook: {{ form_rede_social.facebook_id }}
+        <br>
+        Twitter: {{ form_rede_social.twitter_id }}
+        <br>
+        Foursquare: {{ form_rede_social.foursquare_id }}
+        <br><br>
+        <center>
+            <input type="submit" value="Cadastro"/>              
+        </center>
+    </form>
+    {% if form_eleitor.errors %}
+        {% for field in form_eleitor %}
+            {% for error in field.errors %}
+                <strong>{{ error|escape }}</strong><br>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    {% if form_rede_social.errors %}
+        {% for field in form_rede_social %}
+            {% for error in field.errors %}
+                <strong>{{ error|escape }}</strong>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    
+    {% for error in form_rede_social.non_field_errors %}
+        <strong>{{ error|escape }}</strong></li>
+    {% endfor %}
+    
+</body>
+
+</html>
