@@ -22,7 +22,7 @@ class coreGetIndex(TestCase):
             ('<body>', 1),
             ('Projeto Exemplo', 1),
             ('Cadastro Eleitores', 1),
-            ('<input', 1),
+            ('<input', 2),
             ('</body>', 1),
             ('</html>', 1),
         )
@@ -50,7 +50,7 @@ class corePostIndex(TestCase):
             ('<body>', 1),
             ('Projeto Exemplo', 1),
             ('Cadastro Eleitores', 1),
-            ('<input', 1),
+            ('<input', 2),
             ('</body>', 1),
             ('</html>', 1),
         )

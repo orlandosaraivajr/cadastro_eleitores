@@ -30,4 +30,16 @@ def cadastro(request):
 
 
 def listar(request):
-    pass
+    if request.method == 'POST':
+        eleitor_id = request.POST.get('eleitor_id', '')
+        try:
+            eleitor = EleitorModel.objects.get(pk=eleitor_id)
+            redes_sociais = EleitorRedeSocialModel.objects.get(pk=eleitor_id)
+            contexto = {'eleitor': eleitor, 'redes_sociais': redes_sociais}
+        except ValueError:
+            contexto = {}
+        return render(request, "detalhes.html", contexto)
+    else:
+        eleitores = EleitorModel.objects.all()
+        contexto = {'eleitores': eleitores}
+        return render(request, "listar.html", contexto)
