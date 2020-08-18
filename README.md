@@ -2,8 +2,6 @@
 
 Sistema de cadastro de eleitores desenvolvido para fins didáticos.
 
-[![Build Status](https://travis-ci.org/orlandosaraivajr/cadastro_eleitores.svg?branch=master)](https://travis-ci.org/orlandosaraivajr/cadastro_eleitores.svg?branch=master)
-
 ### Como desenvolver ?
 
 1. Clone o repositório
@@ -21,6 +19,7 @@ source venv/bin/activate
 cd projeto/
 pip install -r requirements.txt 
 cp contrib/env-sample .env
+python manage.py migrate
 python manage.py test
 python manage.py runserver
 ```
